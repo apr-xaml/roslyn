@@ -1,0 +1,24 @@
+Check that all readonly properties are set in constructor or base constructor
+
+Check enum conversion
+
+Track IDisposable
+
+Track tasks so every is awaited
+
+Generate automatically comparison method for dtoes
+
+Check [ConstantTime] attribute
+
+Check [LinearTime] attribute
+
+Check [Pure] attribute
+
+Translate linq-query-comprehend to linq-query-chain
+
+Change tail recursion to iteration
+
+Compile-time IoC
+
+Generate automatic listing of changed properties for notification purposes
+
