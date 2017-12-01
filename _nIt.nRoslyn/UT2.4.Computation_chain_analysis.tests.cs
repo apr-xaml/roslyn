@@ -8,10 +8,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis;
 using nIt.nRoslyn;
-using nIt.nCommon;
 using _nIt.nTestingFramework;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace _nIt.nRoslyn
 {

@@ -30,7 +30,7 @@ namespace _nIt.nRoslyn
 
             var semantics = SemanticOperations.GetSemanticModel(syntaxTree);
 
-            var classSymbol = semantics.GetDeclaredSymbol(syntax);
+            var classSymbol = (INamedTypeSymbol)semantics.GetDeclaredSymbol(syntax);
 
             var isUnderInterest = ThisConstructorMustBeCalledAnalyzer.IsUnderInterest(classSymbol);
 

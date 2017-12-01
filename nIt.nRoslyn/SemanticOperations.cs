@@ -30,7 +30,7 @@ namespace nIt.nRoslyn
 
 
             var typeSymbol = semanticModel.GetDeclaredSymbol(classDeclarationSyntax);
-            
+
             if (typeSymbol == null)
             {
                 return SingleItemResult<INamedTypeSymbol>.NoneElementsMatching;
@@ -42,9 +42,9 @@ namespace nIt.nRoslyn
 
         }
 
-        internal static bool HasAttribute<T>(IMethodSymbol x) where T: Attribute
+        static public bool HasAttribute<T>(IMethodSymbol x) where T : Attribute
         {
-            throw new NotImplementedException();
+            x.GetAttributes().Where(x => x.AttributeClass)
         }
 
         static public IReadOnlyList<IMethodSymbol> FindAllMethodsOfClass(INamedTypeSymbol typeSymbol, string methodNameOf)
@@ -99,7 +99,7 @@ namespace nIt.nRoslyn
             )
             .Select(x => MetadataReference.CreateFromFile(x))
             .ToArray();
-        
+
 
         private static IReadOnlyList<MetadataReference> _AssembliesContaining(params Type[] types)
             => types
