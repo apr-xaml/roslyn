@@ -17,7 +17,7 @@ namespace nIt.nRoslyn
 {
     static public class ComputationGraph
     {
-        
+
         static public (IXor2ComputationNodeReference, AlreadyProcessedSyntaxNodes) FromReturnStatement(ReturnStatementSyntax returnSyntax, MethodBlockAnalysis methodAnalysis, TextSpan span, AlreadyProcessedSyntaxNodes processedNodesOrNull = null)
         {
             Throw.IfNot(methodAnalysis.DataFlowAnalysis.Succeeded);
@@ -27,7 +27,7 @@ namespace nIt.nRoslyn
 
             if (!span.Contains(returnSyntax.Span))
             {
-                return _CreatePair(Maybe.NoValue, processedNodes);
+                return _CreatePair(Xor2ComputationNodeReference.OutOfScope(returnSyntax), processedNodes);
             }
 
             var rhsSyntax = SyntaxOperations.GetRightHandSideExpression(returnSyntax);
@@ -37,7 +37,7 @@ namespace nIt.nRoslyn
             var node = ComputationGraphNode.FromReturnStatement(returnSyntax, previous.Item1);
 
 
-            if (!previous.Item1.Exists)
+            if (!previous.Item1.IsA)
             {
                 return _CreatePair(node, previous.Item2);
             }
@@ -69,7 +69,7 @@ namespace nIt.nRoslyn
 
             if (!span.Contains(syntax.Span))
             {
-                return (Maybe.NoValue, processedNodes);
+                return (Xor2ComputationNodeReference.OutOfScope(syntax), processedNodes);
             }
 
 
@@ -95,7 +95,7 @@ namespace nIt.nRoslyn
 
             if (!span.Contains(syntax.Span))
             {
-                return (Maybe.NoValue, processedNodes);
+                return (Xor2ComputationNodeReference.OutOfScope(syntax), processedNodes);
             }
 
 
@@ -121,7 +121,7 @@ namespace nIt.nRoslyn
 
             if (!span.Contains(syntax.Span))
             {
-                return (Maybe.NoValue, processedNodes);
+                return (Xor2ComputationNodeReference.OutOfScope(syntax), processedNodes);
             }
 
             var cached = processedNodes.Get(syntax);
@@ -141,7 +141,7 @@ namespace nIt.nRoslyn
 
             if (!span.Contains(syntax.Span))
             {
-                return (Maybe.NoValue, processedNodes);
+                return (Xor2ComputationNodeReference.OutOfScope(syntax), processedNodes);
             }
 
             var cached = processedNodes.Get(syntax);
@@ -162,7 +162,7 @@ namespace nIt.nRoslyn
 
             if (!span.Contains(syntax.Span))
             {
-                return (Maybe.NoValue, processedNodes);
+                return (Xor2ComputationNodeReference.OutOfScope(syntax), processedNodes);
             }
 
             var cached = processedNodes.Get(syntax);
@@ -181,7 +181,7 @@ namespace nIt.nRoslyn
         {
             if (!span.Contains(syntax.Span))
             {
-                return (Maybe.NoValue, processedNodes);
+                return (Xor2ComputationNodeReference.OutOfScope(syntax), processedNodes);
             }
 
             var cached = processedNodes.Get(syntax);
@@ -202,7 +202,7 @@ namespace nIt.nRoslyn
 
             if (!span.Contains(syntax.Span))
             {
-                return (Maybe.NoValue, processedNodes);
+                return (Xor2ComputationNodeReference.OutOfScope(syntax), processedNodes);
             }
 
             var cached = processedNodes.Get(syntax);
@@ -214,7 +214,7 @@ namespace nIt.nRoslyn
 
             var variableOrigin = SemanticOperations.GetIdentifierDeclarationSyntax(syntax, methodAnalysis);
 
-            if(!variableOrigin.Exists)
+            if (!variableOrigin.Exists)
             {
                 var node = ComputationGraphNode.FromIdentifierSyntax(syntax, Maybe.NoValue);
 
@@ -230,12 +230,12 @@ namespace nIt.nRoslyn
                                     x => _FinalFromParameter(x, methodAnalysis, processedNodes, span)
                                 );
 
-                var node = ComputationGraphNode.FromIdentifierSyntax(syntax, previous.Item1);
+                var node = ComputationGraphNode.FromIdentifierSyntax(syntax, Maybe.FromReference(previous.Item1));
 
                 return _CreatePair(node, previous);
             }
 
-            
+
         }
 
         private static (IXor2ComputationNodeReference, AlreadyProcessedSyntaxNodes) _FromBinaryOperatorSyntax(BinaryExpressionSyntax syntax, MethodBlockAnalysis methodAnalysis, AlreadyProcessedSyntaxNodes processedNodes, TextSpan span)
@@ -243,7 +243,7 @@ namespace nIt.nRoslyn
 
             if (!span.Contains(syntax.Span))
             {
-                return (Maybe.NoValue, processedNodes);
+                return (Xor2ComputationNodeReference.OutOfScope(syntax), processedNodes);
             }
 
             var cached = processedNodes.Get(syntax);
@@ -269,7 +269,7 @@ namespace nIt.nRoslyn
 
             if (!span.Contains(syntax.Span))
             {
-                return (Maybe.NoValue, processedNodes);
+                return (Xor2ComputationNodeReference.OutOfScope(syntax), processedNodes);
             }
 
             var cached = processedNodes.Get(syntax);
@@ -296,7 +296,7 @@ namespace nIt.nRoslyn
 
             if (!span.Contains(syntax.Span))
             {
-                return (Maybe.NoValue, processedNodes);
+                return (Xor2ComputationNodeReference.OutOfScope(syntax), processedNodes);
             }
 
             var cached = processedNodes.Get(syntax);
@@ -308,19 +308,19 @@ namespace nIt.nRoslyn
 
             var args = _FormListOfArguments(methodAnalysis, processedNodes, syntax.ArgumentList, span);
 
-            var previousNodes = args.Select(x => x.Item1).ToList();
+            var previousNodes = args.Item1.ToList();
 
 
             var node = ComputationGraphNode.FromObjectCreation(syntax, arguments: previousNodes);
 
-            return _CreatePair(node, args.Last());
+            return _CreatePair(node, args.Item2);
         }
         private static (IXor2ComputationNodeReference, AlreadyProcessedSyntaxNodes) _FromParenthesizedExprSyntax(ParenthesizedExpressionSyntax syntax, MethodBlockAnalysis methodAnalysis, AlreadyProcessedSyntaxNodes processedNodes, TextSpan span)
         {
 
             if (!span.Contains(syntax.Span))
             {
-                return (Maybe.NoValue, processedNodes);
+                return (Xor2ComputationNodeReference.OutOfScope(syntax), processedNodes);
             }
 
             var cached = processedNodes.Get(syntax);
@@ -343,7 +343,7 @@ namespace nIt.nRoslyn
 
             if (!span.Contains(syntax.Span))
             {
-                return (Maybe.NoValue, processedNodes);
+                return (Xor2ComputationNodeReference.OutOfScope(syntax), processedNodes);
             }
 
             var cached = processedNodes.Get(syntax);
@@ -358,32 +358,30 @@ namespace nIt.nRoslyn
 
             var argsProcessed = _FormListOfArguments(methodAnalysis, processedNodes, syntax.ArgumentList, span);
 
-            var lastCache = argsProcessed.Any() ? (argsProcessed.Last().Item2) : (processedNodes);
-
-            var target = _DispatchXor7ExpressionSyntax(invocationTarget, methodAnalysis, lastCache, span);
+            var target = _DispatchXor7ExpressionSyntax(invocationTarget, methodAnalysis, argsProcessed.Item2, span);
 
 
-            if (!argsProcessed.Any())
+            if (!argsProcessed.Item1.Any())
             {
-                var invocWithoutArgs = ComputationGraphNode.FromInvocation(syntax, target.Item1, Empty.List<Maybe<ComputationGraphNode>>());
+                var invocWithoutArgs = ComputationGraphNode.FromInvocation(syntax, target.Item1, argsProcessed.Item1);
                 return _CreatePair(invocWithoutArgs, processedNodes);
             }
             else
             {
-                var previousNodes = argsProcessed.Select(x => x.Item1).ToList();
+                var previousNodes = argsProcessed.Item1.ToList();
 
                 var invocWithArgs = ComputationGraphNode.FromInvocation(syntax, target.Item1, previousNodes);
-                return _CreatePair(invocWithArgs, argsProcessed.Last());
+                return _CreatePair(invocWithArgs, argsProcessed.Item2);
             }
 
         }
 
-        private static IReadOnlyList<(Maybe<ComputationGraphNode>, AlreadyProcessedSyntaxNodes)> _FormListOfArguments(MethodBlockAnalysis methodAnalysis, AlreadyProcessedSyntaxNodes processedNodes, ArgumentListSyntax syntax, TextSpan span)
+        private static (IReadOnlyList<IXor2ComputationNodeReference>, AlreadyProcessedSyntaxNodes) _FormListOfArguments(MethodBlockAnalysis methodAnalysis, AlreadyProcessedSyntaxNodes processedNodes, ArgumentListSyntax syntax, TextSpan span)
         {
 
             if (!span.Contains(syntax.Span))
             {
-                return (Maybe<ComputationGraphNode>.NoValue, processedNodes).IntoList();
+                return (Xor2ComputationNodeReference.OutOfScope(syntax).IntoList(), processedNodes);
             }
 
             var arguments = syntax.Arguments
@@ -403,13 +401,13 @@ namespace nIt.nRoslyn
                             )
                             .ToList();
 
-            return previous;
+            return (previous.Select(x => x.Item1).ToList(), previous.Any() ? previous.Last().Item2 : processedNodes);
         }
 
-        private static (IXor2ComputationNodeReference, AlreadyProcessedSyntaxNodes) _CreatePair(IXor2ComputationNodeReference node, (IXor2ComputationNodeReference, AlreadyProcessedSyntaxNodes) previous)
+        private static (IXor2ComputationNodeReference, AlreadyProcessedSyntaxNodes) _CreatePair(Xor2ComputationNodeReference node, (IXor2ComputationNodeReference, AlreadyProcessedSyntaxNodes) previous)
                 => (node, !node.IsA ? (previous.Item2) : (previous.Item2.WithAdded(node.A)));
 
-        private static (IXor2ComputationNodeReference, AlreadyProcessedSyntaxNodes) _CreatePair(IXor2ComputationNodeReference node, AlreadyProcessedSyntaxNodes cache)
+        private static (IXor2ComputationNodeReference, AlreadyProcessedSyntaxNodes) _CreatePair(Xor2ComputationNodeReference node, AlreadyProcessedSyntaxNodes cache)
                 => (node, !node.IsA ? (cache) : (cache.WithAdded(node.A)));
 
     }

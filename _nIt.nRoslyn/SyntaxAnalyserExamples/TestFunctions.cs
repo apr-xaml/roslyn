@@ -77,15 +77,39 @@ namespace _nIt.nRoslyn.SyntaxAnalyserExamples
         public string ProcessStringParameter(string x)
         {
             return x
-                .ToCharArray()
                 .ElementAt(2)
                 .GetType()
                 .Name
-                .ToLower();
+                ;
         }
-  
 
 
+        internal static int ProcessInt32arameterWithMutation(int x)
+        {
+       
+            x++;
 
+            x = x + 1;
+
+            return x;
+        }
+
+        internal static string ProcessInt32arameterWithRamification(int x)
+        {
+            var (a, b) = (1, 2);
+
+            var str = "none";
+
+            if (x > 1000)
+            {
+                str = "high";
+            }
+            else
+            {
+                str = "low";
+            }
+
+            return str;
+        }
     }
 }

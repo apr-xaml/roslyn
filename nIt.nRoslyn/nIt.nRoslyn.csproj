@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -157,6 +159,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analyzer.ThisConstructorMustBecalled\Analyzer.cs" />
+    <Compile Include="Analyzer.ThisConstructorMustBecalled\IXor3IsUnderInterest.cs" />
     <Compile Include="ConstructorChain\ChainOfConstructors.cs" />
     <Compile Include="ComputationChain\ComputationGraph.cs" />
     <Compile Include="ComprehensionLinqSyntaxRewriter.cs" />
@@ -189,6 +193,10 @@
     <ProjectReference Include="..\..\_myStudies\nItCIT\nItCIT.nCommon\nItCIT.nCommon\nItCIT.nCommon.csproj">
       <Project>{C3CC11DA-F948-4E77-A156-45304C538E5A}</Project>
       <Name>nItCIT.nCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="nIt.nRoslyn.nAttributes\nIt.nRoslyn.nAttributes.csproj">
+      <Project>{BF45A4AA-963F-40E2-B4E9-0A3610735A0E}</Project>
+      <Name>nIt.nRoslyn.nAttributes</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

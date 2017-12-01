@@ -18,30 +18,30 @@ namespace _nIt.nRoslyn
     public partial class UT_Computation_chain_analysis
     {
 
-        private Maybe<ComputationGraphNode> _Assert_ReturnStatement(ComputationGraphNode node)
+        private IXor2ComputationNodeReference _Assert_ReturnStatement(ComputationGraphNode node)
         {
 
             Assert.That.IsOfType<ReturnStatementSyntax>(node.Syntax);
-            return node.OtherAntedecents.Value.Single();
+            return node.MainAntedecent.Value;
         }
 
 
-        private Maybe<ComputationGraphNode> _Assert_Identifier(ComputationGraphNode node, string variableName)
+        private IXor2ComputationNodeReference _Assert_Identifier(ComputationGraphNode node, string variableName)
         {
             var ident = (IdentifierNameSyntax)node.Syntax;
             Assert.AreEqual(variableName, ident.Identifier.ToString());
-            return node.OtherAntedecents.Value.Single();
+            return node.MainAntedecent.Value;
         }
 
-        private Maybe<ComputationGraphNode> _Assert_LocalDeclaration(ComputationGraphNode node, string variableName)
+        private IXor2ComputationNodeReference _Assert_LocalDeclaration(ComputationGraphNode node, string variableName)
         {
             var localDecl = (LocalDeclarationStatementSyntax)node.Syntax;
             var varName = SyntaxOperations.GetVariableTokenSingle(localDecl).ToString();
             Assert.AreEqual(variableName, varName);
-            return node.OtherAntedecents.Value.Single();
+            return node.MainAntedecent.Value;
         }
 
-        private Maybe<ComputationGraphNode> _Assert_CastExpression(ComputationGraphNode node, Type type, MethodBlockAnalysis methodAnalysis)
+        private IXor2ComputationNodeReference _Assert_CastExpression(ComputationGraphNode node, Type type, MethodBlockAnalysis methodAnalysis)
         {
             var cast = (CastExpressionSyntax)node.Syntax;
 
@@ -50,29 +50,30 @@ namespace _nIt.nRoslyn
             var typeActualFullName = $"{typeActual.Type.ContainingNamespace}.{typeActual.Type.Name}";
 
             Assert.AreEqual(type.FullName, typeActualFullName);
-            return node.OtherAntedecents.Value.Single();
+            return node.MainAntedecent.Value;
         }
+        
 
-        private Maybe<IReadOnlyList<Maybe<ComputationGraphNode>>> _Assert_StaticInvocation(ComputationGraphNode node, string className, string methodName)
+        private (IXor2ComputationNodeReference Main, IReadOnlyList<IXor2ComputationNodeReference> Args) _Assert_Invocation(ComputationGraphNode node, string methodName)
         {
 
             var invocSyntax = (InvocationExpressionSyntax)node.Syntax;
 
             var expr = invocSyntax.Expression;
 
-            return node.OtherAntedecents;
+            return (node.MainAntedecent.Value, node.OtherVaryingAntedecents.Value);
 
         }
 
-        private Maybe<ComputationGraphNode> _Assert_ParenthesizedExpr(ComputationGraphNode node)
+        private IXor2ComputationNodeReference _Assert_ParenthesizedExpr(ComputationGraphNode node)
         {
             var syntax = (ParenthesizedExpressionSyntax)node.Syntax;
 
-            return node.OtherAntedecents.Value.Single();
+            return node.MainAntedecent.Value;
         }
 
 
-        private (Maybe<ComputationGraphNode> Left, Maybe<ComputationGraphNode> Right) _Assert_BinaryExpression(ComputationGraphNode node, SyntaxKind operatorToken)
+        private (IXor2ComputationNodeReference Left, IXor2ComputationNodeReference Right) _Assert_BinaryExpression(ComputationGraphNode node, SyntaxKind operatorToken)
         {
             var syntax = (BinaryExpressionSyntax)node.Syntax;
 
@@ -80,22 +81,22 @@ namespace _nIt.nRoslyn
 
             Assert.AreEqual(operatorToken, actualToken.Kind());
 
-            var (left, right, rest) = node.OtherAntedecents.Value;
-
-            return (left, right);
+            return (node.LeftAntedecent.Value, node.RightAntedecent.Value);
+       
         }
 
 
         private void _Assert_Literal(ComputationGraphNode node, int value)
         {
             var syntax = (LiteralExpressionSyntax)node.Syntax;
+
             Assert.AreEqual(value, int.Parse(syntax.Token.Text));
 
-            Assert.IsFalse(node.OtherAntedecents.Exists);
+            Assert.IsFalse(node.MainAntedecent.Exists);
         }
 
 
-        private void _Assert_IdentifierMethodParam(ComputationGraphNode node, string paramName, Type paramType, MethodBlockAnalysis methodAnalysis)
+        private void _Assert_MethodParam(ComputationGraphNode node, string paramName, Type paramType, MethodBlockAnalysis methodAnalysis)
         {
             var syntax = (ParameterSyntax)node.Syntax;
 
@@ -108,6 +109,17 @@ namespace _nIt.nRoslyn
             Assert.AreEqual(paramName, syntax.Identifier.ToString());
 
             Assert.AreEqual(expectedType, actualType);
+
+            Assert.IsFalse(node.MainAntedecent.Exists);
+        }
+
+
+        private IXor2ComputationNodeReference _Assert_MemberAccess(IXor2ComputationNodeReference node, string propName)
+        {
+            var syntax = (MemberAccessExpressionSyntax)node.A.Syntax;
+
+            Assert.AreEqual(propName, syntax.Name.ToString());
+            return node.A.MainAntedecent.Value;
         }
 
     }

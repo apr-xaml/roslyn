@@ -11,11 +11,11 @@ namespace nIt.nRoslyn
     public class AlreadyProcessedSyntaxNodes
     {
 
-        Dictionary<SyntaxNode, ComputationGraphNode> _nodesBySyntax = new Dictionary<SyntaxNode, ComputationGraphNode>();
+        Dictionary<SyntaxNode, Xor2ComputationNodeReference> _nodesBySyntax = new Dictionary<SyntaxNode, Xor2ComputationNodeReference>();
 
-        public Maybe<ComputationGraphNode> Get(SyntaxNode syntaxNode)
+        public Maybe<Xor2ComputationNodeReference> Get(SyntaxNode syntaxNode)
         {
-            if (_nodesBySyntax.TryGetValue(syntaxNode, out ComputationGraphNode node))
+            if (_nodesBySyntax.TryGetValue(syntaxNode, out Xor2ComputationNodeReference node))
             {
                 return node;
             }

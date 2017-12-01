@@ -25,25 +25,23 @@ namespace _nIt.nRoslyn
 
             var codeAsText2 = File.ReadAllText(@"SyntaxAnalyserExamples/PartialClass.part2.cs");
             var syntaxTree2 = SyntaxOperations.Parse(codeAsText2);
-            var classDeclarationSyntax1 = SyntaxOperations.FindClass<PartialClass>(syntaxTree2).A;
-            var semanticModel1 = SemanticOperations.GetSemanticModel(syntaxTree2);
+            var classDeclarationSyntax2 = SyntaxOperations.FindClass<PartialClass>(syntaxTree2).A;
+            var semanticModel2 = SemanticOperations.GetSemanticModel(syntaxTree2);
 
 
             var twoArgsCtor = SyntaxOperations
-                .FindConstructorsOf(classDeclarationSyntax1, semanticModel1, argsCount: 2)
+                .FindConstructorsOf(classDeclarationSyntax2, semanticModel2, argsCount: 2)
                 .Single();
 
 
-
             Assert.IsNotNull(twoArgsCtor);
-
         }
 
 
 
 
         [TestMethod, TestCategory(TEST_CATEGORY_PARTIAL_CLASS_ANALYSIS), DeploymentItem(@"SyntaxAnalyserExamples/PartialClass.part2.cs", "SyntaxAnalyserExamples")]
-        public void Semantic_model_can_be_obtained_from_partial_definition_of_a_class_2()
+        public void Partial_chain_of_constructors_can_be_obtained_from_partial_code_2()
         {
 
 

@@ -10,38 +10,65 @@ using nItCIT.nCommon.nFSharp;
 
 namespace nIt.nRoslyn
 {
-    public class ComputationGraphNode
+
+
+
+    public class AbstractComputationGraphNode
     {
+
+        public AbstractComputationGraphNode(SyntaxNode syntax, IXor2ComputationNodeReference specialAntedecent = null, IXor2ComputationNodeReference leftAntedecent = null, IXor2ComputationNodeReference rightAntedecent = null, IReadOnlyList<IXor2ComputationNodeReference> varyingAntedecents = null)
+        {
+            this.Syntax = syntax;
+            this.LeftAntedecent = Maybe.FromNullableReference(leftAntedecent);
+            this.RightAntedecent = Maybe.FromNullableReference(rightAntedecent);
+            this.MainAntedecent = Maybe.FromNullableReference(specialAntedecent);
+            this.OtherVaryingAntedecents = Maybe.FromNullableReference(varyingAntedecents);
+        }
 
         public SyntaxNode Syntax { get; }
 
 
-        public Maybe<IXor2ComputationNodeReference> SpecialAntedecent { get; }
-        public Maybe<IReadOnlyList<IXor2ComputationNodeReference>> OtherAntedecents { get; }
+        public Maybe<IXor2ComputationNodeReference> MainAntedecent { get; }
+
+        public Maybe<IXor2ComputationNodeReference> LeftAntedecent { get; }
+
+        public Maybe<IXor2ComputationNodeReference> RightAntedecent { get; }
+        public Maybe<IReadOnlyList<IXor2ComputationNodeReference>> OtherVaryingAntedecents { get; }
+    }
 
 
-        private ComputationGraphNode(SyntaxNode syntax, IXor2ComputationNodeReference specialAntedecent, IReadOnlyList<IXor2ComputationNodeReference> otherAntedecents)
+
+
+
+    public class ComputationGraphNode : AbstractComputationGraphNode
+    {
+
+        private ComputationGraphNode(SyntaxNode leafSyntax) : base(leafSyntax)
         {
-            this.Syntax = syntax;
-            this.SpecialAntedecent = Maybe.FromReference(specialAntedecent);
-            this.OtherAntedecents = Maybe.FromReference(otherAntedecents);
+
+        }
+
+        private ComputationGraphNode(SyntaxNode syntax, IXor2ComputationNodeReference specialAntedecent) : base(syntax, specialAntedecent)
+        {
+
+        }
+
+        private ComputationGraphNode(SyntaxNode syntax, IXor2ComputationNodeReference specialAntedecent, IReadOnlyList<IXor2ComputationNodeReference> varyingAntedecents) : base(syntax, specialAntedecent, varyingAntedecents: varyingAntedecents)
+        {
+
         }
 
 
-        private ComputationGraphNode(SyntaxNode syntax, IReadOnlyList<IXor2ComputationNodeReference> otherAntedecents)
+        private ComputationGraphNode(SyntaxNode syntax, IXor2ComputationNodeReference leftAntedecent, IXor2ComputationNodeReference rightAntedecent) : base(syntax, leftAntedecent: leftAntedecent, rightAntedecent: rightAntedecent)
         {
-            this.Syntax = syntax;
-            this.SpecialAntedecent = Maybe.NoValue;
-            this.OtherAntedecents = Maybe.FromReference(otherAntedecents);
+
         }
 
-
-        private ComputationGraphNode(SyntaxNode syntax)
+        private ComputationGraphNode(SyntaxNode syntax, IReadOnlyList<IXor2ComputationNodeReference> varyingAntedecents) : base(syntax, varyingAntedecents: varyingAntedecents)
         {
-            this.Syntax = syntax;
-            this.SpecialAntedecent = Maybe.NoValue;
-            this.OtherAntedecents = Maybe.NoValue;
+
         }
+
 
 
 
@@ -51,16 +78,16 @@ namespace nIt.nRoslyn
 
 
         static public ComputationGraphNode FromLocalDeclarationSyntax(LocalDeclarationStatementSyntax syntax, IXor2ComputationNodeReference previous)
-         => new ComputationGraphNode(syntax, previous.IntoList());
+         => new ComputationGraphNode(syntax, previous);
 
-        static public ComputationGraphNode FromIdentifierSyntax(IdentifierNameSyntax syntax, IXor2ComputationNodeReference previous)
-            => new ComputationGraphNode(syntax, previous.IntoList());
+        static public ComputationGraphNode FromIdentifierSyntax(IdentifierNameSyntax syntax, Maybe<IXor2ComputationNodeReference> previous)
+            => !previous.Exists ? new ComputationGraphNode(syntax) : new ComputationGraphNode(syntax, previous.Value);
 
         static public ComputationGraphNode FromCastSyntax(CastExpressionSyntax syntax, IXor2ComputationNodeReference previous)
-            => new ComputationGraphNode(syntax, previous.IntoList());
+            => new ComputationGraphNode(syntax, previous);
 
         static public ComputationGraphNode FromReturnStatement(ReturnStatementSyntax syntax, IXor2ComputationNodeReference previous)
-            => new ComputationGraphNode(syntax, previous.IntoList());
+            => new ComputationGraphNode(syntax, previous);
 
         static public ComputationGraphNode FinalFromPropertyDeclaration(PropertyDeclarationSyntax syntax)
             => new ComputationGraphNode(syntax);
@@ -71,23 +98,22 @@ namespace nIt.nRoslyn
         static public ComputationGraphNode FinalFromParameter(ParameterSyntax syntax)
             => new ComputationGraphNode(syntax);
 
-        static public ComputationGraphNode Binary(BinaryExpressionSyntax syntax, IXor2ComputationNodeReference previousLeft, IXor2ComputationNodeReference previousRight)
+        static public ComputationGraphNode Binary(BinaryExpressionSyntax syntax, IXor2ComputationNodeReference leftAntedecent, IXor2ComputationNodeReference rightAntedecent)
         {
-            var previous = new[] { previousLeft, previousRight }.ToList();
-            return new ComputationGraphNode(syntax, previous);
+            return new ComputationGraphNode(syntax, leftAntedecent: leftAntedecent, rightAntedecent: rightAntedecent);
         }
 
 
         static public ComputationGraphNode FromObjectCreation(ObjectCreationExpressionSyntax syntax, IReadOnlyList<IXor2ComputationNodeReference> arguments)
-            => new ComputationGraphNode(syntax, arguments);
+            => new ComputationGraphNode(syntax, varyingAntedecents: arguments);
 
         static public ComputationGraphNode FromInvocation(InvocationExpressionSyntax syntax, IXor2ComputationNodeReference target, IReadOnlyList<IXor2ComputationNodeReference> arguments)
             => new ComputationGraphNode(syntax, target, arguments);
 
         static public ComputationGraphNode FromParenthesizedExprSyntax(ParenthesizedExpressionSyntax syntax, IXor2ComputationNodeReference previous)
-            => new ComputationGraphNode(syntax, previous.IntoList());
+            => new ComputationGraphNode(syntax, previous);
 
         static public ComputationGraphNode FromMemberAccess(MemberAccessExpressionSyntax syntax, IXor2ComputationNodeReference previous)
-            => new ComputationGraphNode(syntax, previous.IntoList());
+            => new ComputationGraphNode(syntax, previous, varyingAntedecents: Empty.List<IXor2ComputationNodeReference>());
     }
 }

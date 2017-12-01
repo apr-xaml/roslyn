@@ -115,7 +115,7 @@ namespace _nIt.nRoslyn
         }
 
         [TestMethod, DeploymentItem(@"SyntaxAnalyserExamples/PartialClass.part1.cs", "SyntaxAnalyserExamples"), DeploymentItem(@"SyntaxAnalyserExamples/PartialClass.part2.cs", "SyntaxAnalyserExamples")]
-        public void Partial_class_symbol_has_many_syntax_references()
+        public void Partial_class_symbol_has_many_syntax_references_depending_on_source_syntax_tree_it_was_obtained()
         {
 
             var codeAsText1 = File.ReadAllText(@"SyntaxAnalyserExamples/PartialClass.part1.cs");

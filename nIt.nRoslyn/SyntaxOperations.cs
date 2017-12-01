@@ -133,7 +133,6 @@ namespace nIt.nRoslyn
                 .Where(x => (argsCount == null) || (x.Parameters.Length == argsCount.Value))
                 .ToList();
 
-
             var ctorSyntaxes = ctorSymbols
                 .Select(x => x.DeclaringSyntaxReferences.Single().GetSyntax())
                 .Cast<ConstructorDeclarationSyntax>()

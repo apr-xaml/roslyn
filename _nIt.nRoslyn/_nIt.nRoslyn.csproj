@@ -28,6 +28,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,6 +37,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CodeAnalysis, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -132,6 +134,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SyntaxAnalyserExamples\MustCallSpecialConstructor.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="SyntaxAnalyserExamples\ClassFamily.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
@@ -153,6 +158,7 @@
     <Compile Include="SyntaxAnalyserExamples\PartialClass.part1.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="Analyzer.ThisConstructorMustBeAlwaysCalled.cs" />
     <Compile Include="UT2.1.Constructor_analysis.Commons.cs" />
     <Compile Include="UT2.4.Computation_chain_analysis.utils.cs" />
     <Compile Include="UT2.4.Computation_chain_analysis.tests.cs" />
@@ -186,6 +192,10 @@
     <ProjectReference Include="..\nIt.nRoslyn\nIt.nRoslyn.csproj">
       <Project>{6EAB2D52-2412-4D57-B695-1F95C67671BB}</Project>
       <Name>nIt.nRoslyn</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\nIt.nRoslyn\nIt.nRoslyn.nAttributes\nIt.nRoslyn.nAttributes.csproj">
+      <Project>{BF45A4AA-963F-40E2-B4E9-0A3610735A0E}</Project>
+      <Name>nIt.nRoslyn.nAttributes</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
