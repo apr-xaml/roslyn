@@ -16,17 +16,24 @@ namespace nIt.nRoslyn.nAnalyzer.nThisConstructorMustBecalled
         {
             var isClass = (classSymbol.TypeKind == TypeKind.Class);
 
-
-
             var ctors = classSymbol.Constructors.Where(SemanticOperations.HasAttribute<ThisConstructorMustBeAlwaysCalledAttribute>).ToList();
 
             if(!ctors.Any())
             {
-                return 
+                return Xor3IsUnderInterest.NoneCtor;
             }
             else
             {
+                var (ctor, rest) = ctors;
 
+                if(rest.Any())
+                {
+                    return Xor3IsUnderInterest.MoreThanOne(ctors);
+                }
+                else
+                {
+                    return new Xor3IsUnderInterest(ctor);
+                }
             }
 
         }

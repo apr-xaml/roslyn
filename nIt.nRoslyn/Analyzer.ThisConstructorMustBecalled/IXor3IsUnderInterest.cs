@@ -14,16 +14,28 @@ namespace nIt.nRoslyn.Analyzer.ThisConstructorMustBecalled
 
     public class Xor3IsUnderInterest : IXor3IsUnderInterest
     {
-        Xor3<ExactlyOneCtorWithAttribute, MoreThanOneCtorWithAtribute, NoneCtorWithAttribute> _innerXor;
 
+        Xor3<ExactlyOneCtorWithAttribute, MoreThanOneCtorWithAtribute, NoneCtorWithAttribute> _innerXor;
+   
+
+        static public Xor3IsUnderInterest NoneCtor { get; } = new Xor3IsUnderInterest(new NoneCtorWithAttribute());
+
+        static public Xor3IsUnderInterest MoreThanOne(IReadOnlyList<ISymbol> ctors) => new Xor3IsUnderInterest(ctors);
 
         public Xor3IsUnderInterest(ISymbol ctorSymbol)
         {
             _innerXor = new ExactlyOneCtorWithAttribute(ctorSymbol);
         }
 
+        Xor3IsUnderInterest(NoneCtorWithAttribute noneCtorWithAttribute)
+        {
+            _innerXor = noneCtorWithAttribute;
+        }
 
-
+        Xor3IsUnderInterest(IReadOnlyList<ISymbol> ctors)
+        {
+            _innerXor = new MoreThanOneCtorWithAtribute(ctors);
+        }
 
         public bool IsA => _innerXor.IsA;
 
@@ -51,6 +63,13 @@ namespace nIt.nRoslyn.Analyzer.ThisConstructorMustBecalled
 
     public struct MoreThanOneCtorWithAtribute
     {
+
+        IReadOnlyList<ISymbol> Ctors { get; }
+
+        public MoreThanOneCtorWithAtribute(IReadOnlyList<ISymbol> ctors)
+        {
+            Ctors = ctors;
+        }
 
     }
 

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nIt.nRoslyn", "nIt.nRoslyn.csproj", "{6EAB2D52-2412-4D57-B695-1F95C67671BB}"
 EndProject
@@ -9,11 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_nIt.nRoslyn", "..\_nIt.nRo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nIt.nRoslyn.nAttributes", "nIt.nRoslyn.nAttributes\nIt.nRoslyn.nAttributes.csproj", "{BF45A4AA-963F-40E2-B4E9-0A3610735A0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nItCIT.nCommon", "..\..\_myStudies\nItCIT\nItCIT.nCommon\nItCIT.nCommon\nItCIT.nCommon.csproj", "{C3CC11DA-F948-4E77-A156-45304C538E5A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commons", "Commons", "{72227291-881D-44B9-B779-B2230CC4765B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_nIt.nTestingFramework", "..\..\_myStudies\nItCIT\nItCIT.nCommon\_nIt.nTestingFramework\_nIt.nTestingFramework.csproj", "{4B37D9B8-5F77-4018-8466-00D27F2E48C4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nItCIT.nCommon", "..\..\_myStudies\nItCIT\nItCIT.nCommon\nItCIT.nCommon.csproj", "{C3CC11DA-F948-4E77-A156-45304C538E5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_nIt.nTestingFramework", "..\..\_myStudies\nItCIT\_nIt.nTestingFramework\_nIt.nTestingFramework.csproj", "{4B37D9B8-5F77-4018-8466-00D27F2E48C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

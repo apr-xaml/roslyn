@@ -167,6 +167,7 @@
     <Compile Include="ComprehensionLinqSyntaxWalker.cs" />
     <Compile Include="ComputationChain\ComputationGraphNode.cs" />
     <Compile Include="ComputationChain\ProcessedNodeCache.cs" />
+    <Compile Include="extensions\ext_INamedTypeSymbols.cs" />
     <Compile Include="LinqSyntaxOperations.cs" />
     <Compile Include="maybe\IOutsideSyntaxReach.cs" />
     <Compile Include="MethodExpressionAnalysis.cs" />
@@ -190,7 +191,7 @@
     <Analyzer Include="packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\_myStudies\nItCIT\nItCIT.nCommon\nItCIT.nCommon\nItCIT.nCommon.csproj">
+    <ProjectReference Include="..\..\_myStudies\nItCIT\nItCIT.nCommon\nItCIT.nCommon.csproj">
       <Project>{C3CC11DA-F948-4E77-A156-45304C538E5A}</Project>
       <Name>nItCIT.nCommon</Name>
     </ProjectReference>
